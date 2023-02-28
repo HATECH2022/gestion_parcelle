@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  
+    
+############################################# Projet DE Parcelle ##########################################################""
+
+	         
+         
+        <record id="view_projet_parcelle_form" model="ir.ui.view">
+            <field name="name">projet.parcelle</field>
+            <field name="model">projet.parcelle</field>            
+            <field name="arch" type="xml">
+                <form>           
+                	<group colspan="2" col="2">
+                        <field name='name'/>
+                    	<field name='description'/>                    	
+                  	</group>  
+                 </form>
+            </field>
+        </record>   
+	      
+	      
+        <record id="view_projet_zone_tree" model="ir.ui.view">
+            <field name="name">projet.parcelle</field>
+            <field name="model">projet.parcelle</field> 
+            <field name="type">tree</field>
+            <field name="arch" type="xml" >
+               <tree string="Porjet de Parcelle">
+                        <field name='name'/>
+                    	<field name='description'/>                	
+                  	 
+               </tree>   	
+            </field>
+        </record>
+
+
+
+    <record model="ir.actions.act_window" id="action_form_projet_zone">
+        <field name="name">Projet de parcelle</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">projet.parcelle</field>        
+        <field name="view_mode">tree,form</field>
+        
+    </record>
+    
+    
+
+    <menuitem action="action_form_projet_zone" id="suivi_conf_projet_zone_add" parent="menu_parcelle_configuration" sequence="4"/>
+
+
+    
+</odoo>

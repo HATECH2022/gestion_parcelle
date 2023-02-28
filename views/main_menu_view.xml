@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>    
+
+	<menuitem id = "menu_parcelle_root" name = "Gestion des Parcelles" sequence = "1" web_icon="gestion_parcelle,static/description/parcelle.png"/>
+	<menuitem id="menu_parcelle_gestion" parent="menu_parcelle_root" name="Gestion des Parcelles" sequence="1"/>
+	<menuitem id="menu_parcelle_configuration" parent="menu_parcelle_root" name="Configuration" sequence="3"/>
+    
+</odoo>

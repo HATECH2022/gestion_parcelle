@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  
+    
+############################################# Zone DE Parcelle ##########################################################""
+
+	         
+        <record id="view_zone_parcelle_form" model="ir.ui.view">
+            <field name="name">zone.parcelle</field>
+            <field name="model">zone.parcelle</field>            
+            <field name="arch" type="xml">
+                <form>           
+                	<group colspan="3" col="3">
+                        <field name='name'/>
+                    	<field name='projetparcelle_id'/>
+                    	<field name='description'/>                    	
+                  	</group>  
+                 </form>
+            </field>
+        </record>   
+	      
+	      
+        <record id="view_zone_parcelle_tree" model="ir.ui.view">
+            <field name="name">zone.parcelle</field>
+            <field name="model">zone.parcelle</field> 
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+               <tree string="Zone Lot de Parcelle">
+                        <field name='name'/>
+                    	<field name='projetparcelle_id'/>
+                    	<field name='description'/>                   	
+                  	 
+               </tree>   	
+            </field>
+        </record>
+
+
+
+    <record model="ir.actions.act_window" id="action_form_zone_parcelle">
+        <field name="name">Zone Lot de Parcelle</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">zone.parcelle</field>        
+        <field name="view_mode">tree,form</field>
+        
+    </record>
+    
+    
+
+    <menuitem action="action_form_zone_parcelle" id="suivi_conf_zone_parcelle_add" parent="menu_parcelle_configuration" sequence="3"/>
+
+
+    
+</odoo>

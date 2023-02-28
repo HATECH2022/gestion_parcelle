@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record id="view_sale_parcelle_form" model="ir.ui.view">
+        <field name="model">sale.order</field>
+        <field name="name">view.inherit.sale.order.form</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+				 <header>
+                	<button name="add_autolines"  string="Ajouter le Prix" type="object"  attrs="{'invisible': [('state', '!=', 'draft')]}"  confirm=" Etez-vous sûre de vouloir completer cette devis ?" />
+              	</header>
+        			<xpath expr="//group[@name='partner_details']/*[1]" position="before">
+                        <field name="projetparcelle_id" string="Projet de Parcelle" options="{'no_create': True, 'no_create_edit':True}" on_change="onchange_zone()"/>
+                        <field name="zoneparcelle_id" string="Zone Lot" options="{'no_create': True, 'no_create_edit':True}" on_change="onchange_lot()"/>
+                        <field name="lot" string="N° Lot Parcelle"  options="{'no_create': True, 'no_create_edit':True}"/>
+                       <!-- <field name="lot_id" string="N° Lot Parcelle" domain="[('status','in',['process'])]" options="{'no_create': True, 'no_create_edit':True}" required="1"/>-->
+        		</xpath>
+
+   
+   
+	 </field>
+</record>
+	
+		<!-- Vue Tree Pour Commande-->
+		<record id="view_saleorder_parselle_tree" model="ir.ui.view">
+			<field name="model">sale.order</field>
+			<field name="name">view.inherit.sale.order.tree</field>
+			<field name="type">tree</field>
+			<field name="inherit_id" ref="sale.view_order_tree"/>
+			<field name="arch" type="xml">
+				<field name="name" position="after">					
+					<field name="zoneparcelle_id" string="Zone Lot"/>
+                    <field name="lot" string="N° Lot Parselle"/>
+				</field>
+			</field>
+		</record>
+
+		<!-- Vue Tree Pour Devis-->
+		<record id="view_salequotation_parselle_tree" model="ir.ui.view">
+			<field name="model">sale.order</field>
+			<field name="name">view.inherit.sale.order.tree</field>
+			<field name="type">tree</field>
+			<field name="inherit_id" ref="sale.view_quotation_tree"/>
+			<field name="arch" type="xml">
+				<field name="name" position="after">					
+					<field name="zoneparcelle_id" string="Zone Lot"/>
+                    <field name="lot" string="N° Lot Parselle"/>
+				</field>
+			</field>
+		</record>
+		
+		
+
+</odoo>

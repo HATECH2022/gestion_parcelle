@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gestion_parcelle,access.gestion.parcelle,model_gestion_parcelle,base.group_user,1,1,1,1
+access_projet_parcelle,access.projet.parcelle,model_projet_parcelle,base.group_user,1,1,1,1
+access_zone_parcelle,access.zone.parcelle,model_zone_parcelle,base.group_user,1,1,1,1

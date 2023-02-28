@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="parcelle_search" model="ir.ui.view">
+        <field name="name">gestion.parcelle.search</field>
+        <field name="model">gestion.parcelle</field>
+        <field name="arch" type="xml">
+            <search string="Parcelle">
+                <group>
+
+                    <separator orientation="vertical"/>
+                    <field name="lot"></field>
+                    <field name="client_id" string="Propriétaire"></field>
+                    <!--field  name="batch_number"> </field-->
+                    <field name="zoneparcelle_id"></field>
+                    <field name="projetparcelle_id"></field>
+                </group>
+                <newline/>
+                <filter string="Projet Parcelle Nagaad" name="projet_parcelle_filter"
+                        domain="[('projetparcelle_id', '=', 'Nagaad')]"/>
+                <filter string="Zone Lot A" name="zone_parcellee_filter"
+                        domain="[('zoneparcelle_id', '=', 'Zone A - Nagaad')]"/>
+                <filter string="Zone Lot B" name="zone_parcelle_filter"
+                        domain="[('zoneparcelle_id', '=', 'Zone B - Nagaad')]"/>
+                <separator/>
+
+                <group expand="0" string="Group By">
+                    <filter name="zoneparcelle_id" string="ZoneLot de parcelle" domain="[]"
+                            context="{'group_by': 'zoneparcelle_id'}"/>
+                    <filter name="projetparcelle_id" string="Projet de parcelle" domain="[]"
+                            context="{'group_by': 'projetparcelle_id'}"/>
+                    <filter name="client_id" string="Propriétaire" domain="[]" context="{'group_by': 'client_id'}"/>
+                    <filter name="zone" string="Zone" domain="[]" context="{'group_by': 'zone'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_gestion_parcelle_dossier" model="ir.actions.act_window">
+        <field name="name">Gestion des Parcelles</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">gestion.parcelle</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="parcelle_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer votre parcelle !
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="gestion_parcelle"
+              name="Parcelles"
+              parent="menu_parcelle_gestion"
+              action="action_gestion_parcelle_dossier"
+              sequence="10"
+
+    />
+
+    <record id="parcelle_tree" model="ir.ui.view">
+        <field name="name">gestion.parcelle.tree</field>
+        <field name="model">gestion.parcelle</field>
+        <field name="arch" type="xml">
+            <tree string="Parcelles" decoration-primary="status == 'draft'" decoration-warning="status == 'invoiced'"
+                  decoration-muted="status == 'cancelled'" decoration-danger="status == 'process'"
+                  decoration-success="status == 'paid'">
+                <field name="lot"/>
+                <field name="zone"/>
+
+                <field name="sup"/>
+                <field name="projetparcelle_id"/>
+                <field name="zoneparcelle_id"/>
+                <field name="client_id"/>
+                <!--  <field name="prix"/> -->
+                <field name="date_depot"/>
+                <field name="status"/>
+
+
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="parcelle_form" model="ir.ui.view">
+        <field name="name">gestion.parcelle.form</field>
+        <field name="model">gestion.parcelle</field>
+        <field name="arch" type="xml">
+            <form string="Parcelle">
+                <header>
+                    <button name="mettre_envente" string="Mettre en vente" type="object"
+                            attrs="{'invisible': [('status', '!=', 'draft')]}"
+                            confirm=" Etez-vous sûre de vouloir mettre en vente cette parcelle ?" class="oi-map"/>
+                   
+	            <button name="btn_annuler" string="Annuler" type="object"
+                            attrs="{'invisible': [('status', '==', 'draft')]}"
+                            confirm=" Etez-vous sûre de vouloir annuler la vente cette parcelle ?" class="oi-map"/>
+	 <!--<button name="etat_canceled"  string="Annuler" type="object" attrs="{'invisible': [('status', '!=', 'draft'),('status', '!=', 'process')]}"  confirm=" Etez-vous sûre de vouloir annuler ce parcelle ?" />
+                    <button name="valider"  string="Valider" type="object" attrs="{'invisible': [('status', '!=', 'draft')]}"  confirm=" Etez-vous sûre de vouloir valider ce parcelle ?" />
+                 <button name="sendsms"  string="Envoyer SMS" type="object" />
+                    <button name="action_send_email" string="Envoyer par Email" type="object" class="oe_highlight"/>
+                 <button name="suivicourrier_whatsapp" string="Whatsapp Message" type="object" class="oe_stat_button"
+                         icon="fa-whatsapp"/>
+                          bg_color="bg-info"
+                          bg_color="bg-danger"
+
+                         -->
+
+
+                    <field name="status" widget="statusbar"/>
+
+                </header>
+                <sheet>
+
+                    <div name="button_box" class="oe_button_box">
+                        <button class="oe_stat_button"
+                                name="action_view_client_id"
+                                type="object"
+                                icon="fa-user"
+                                attrs="{'invisible': [('client_id', '==', False)]}">
+                            <field string="client" name="client_id" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button"
+                                name="action_view_sale_order_lot"
+                                type="object"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('sale_order_id', '==', False)]}">
+                            <!--                            <field string="Commande" name="sale_order_id" widget="statinfo"/>-->
+                            <span>Commande</span>
+                        </button>
+                    </div>
+                    <field name="sale_order_id" invisible="1"/>
+                    <field name="parcelle_state_vente" invisible="1"/>
+                    <widget name="web_ribbon" bg_color="bg-danger" title="Réserver"
+                            attrs="{'invisible': [ ('parcelle_state_vente', '!=', 'reserve')]}"/>
+                    <widget name="web_ribbon" bg_color="bg-primary" title="Libre"
+                            attrs="{'invisible': [ ('parcelle_state_vente', '!=', 'libre')]}"/>
+                    <widget name="web_ribbon" bg_color="bg-success" title="En Vente"
+                            attrs="{'invisible': [ ('parcelle_state_vente', '!=', 'process')]}"/>
+                    <widget name="web_ribbon" bg_color="bg-warning" title="Facturation Brouillon"
+                            attrs="{'invisible': [ ('parcelle_state_vente', '!=', 'invoiced_draft')]}"/>
+                    <widget name="web_ribbon" bg_color="bg-warning" title="En Facturation"
+                            attrs="{'invisible': [ ('parcelle_state_vente', '!=', 'invoiced_posted')]}"/>
+                    <widget name="web_ribbon" bg_color="bg-success" title="Partiel"
+                            attrs="{'invisible': [ ('parcelle_state_vente', '!=', 'partial')]}"/>
+                    <widget name="web_ribbon" bg_color="bg-success" title="Payé"
+                            attrs="{'invisible': [ ('parcelle_state_vente', '!=', 'paid')]}"/>
+
+                    <!--<div class="oe_title">
+                        <h1>
+
+                            <field name="lot" placeholder="Lot du parcelle ..." />
+                        </h1>
+
+                    </div>-->
+                    <group>
+                        <group>
+                            <field name="lot" placeholder="Lot du parcelle ..."/>
+                            <field name="numero_parcelle" />
+                            <field name="vocation" string="Vocation"/>
+                        </group>
+                        <group>
+                            <field name="client_id" placeholder="Propriétaire ..."/>
+                            <field name="projetparcelle_id" on_change="onchange_zone()"/>
+                            <field name="zoneparcelle_id"/>
+                        </group>
+                        <group>
+
+                            <field name="zone"/>
+                            <field name="sup"/>
+                            <field name="prix"/>
+
+                        </group>
+                        <!--<group>
+
+                            <field name="telephone" widget="phone"/>
+                            <field name="email" widget="email" placeholder="Exemple@email...."/>
+
+                        </group>-->
+
+
+                        <group>
+                            <field name="date_depot"/>
+                            <field name="Goudron"/>
+                            <field name="largeur"/>
+                            <!-- <field name="reserver" readonly="True" />-->
+
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="courrier_kanban" model="ir.ui.view">
+        <field name="name">gestion.parcelle.kanban</field>
+        <field name="model">gestion.parcelle</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <kanban>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+
+                            <div class="oe_kanban_details">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <h1>
+                                                <field name="lot" placeholder="Lot du parcelle"/>
+                                            </h1>
+                                        </strong>
+                                        <h2>
+                                            <span t-if="record.nom.raw_value" class="o_kanban_record_subtitle">
+                                                <field name="client_id"/>
+                                            </span>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li t-if="record.zoneparcelle.raw_value" class="o_text_overflow">
+                                        <field name="zoneparcelle_id"/>
+                                    </li>
+                                    <li t-if="record.projetparcelle.raw_value" class="o_text_overflow">
+                                        <field name="projetparcelle_id"/>
+                                    </li>
+                                    <li t-if="record.sup.raw_value" class="o_text_overflow">
+                                        <field name="sup"/>
+                                    </li>
+                                </ul>
+                                <div class="float-left mr4">
+                                    <field name="prix" widget="priority"/>
+                                </div>
+                            </div>
+                            <!--                             <div class="o_kanban_record_bottom mt4"> -->
+                            <!--                               <div class="float-left mr4" > -->
+                            <!--                                    <field name="priority" widget="priority"/> -->
+                            <!--                               </div> -->
+                            <!--                             </div> -->
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+</odoo>
